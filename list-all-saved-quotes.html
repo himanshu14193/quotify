@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>All Quotes</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body onload="getAllQuotes()" style="background-color: grey">
+        <h1 align=center>Quotify</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="navbar-nav nav-fill w-100">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Random Quote (API)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="saved-quotes.html">Random Quote (Local)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="new-quote.html">Add Quote</a>
+                        </li>
+                        <li class="active nav-item">
+                            <a class="nav-link" href="list-all-saved-quotes.html">List All Quotes</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="m-5" id="allquote">
+            </div>
+        </div>
+        <script>
+                let quotes ,text , author ,textHandle, authorHandle
+                if(localStorage.getItem('quotes')) {
+                    quotes = JSON.parse(localStorage.getItem('quotes'))
+                }
+                else {
+                    localStorage.setItem('quotes', JSON.stringify([]))
+                    quotes = JSON.parse(localStorage.getItem('quotes'))
+                }
+    
+                const allQuoteHandle = document.getElementById('allquote')
+
+                
+                    
+    
+                function getAllQuotes(){
+                    for(let i=0;i<quotes.length;i++){
+                        quotes = JSON.parse(localStorage.getItem('quotes'))                        
+                        allQuoteHandle.innerHTML += `<div id="text${i}" class="p-4 bg-white" align= "center">${quotes[i].text}</div>
+                            <div id="author${i}" class="p-3 bg-light" align= "right">${quotes[i].author}</div>
+                            <div class="text-right">
+                            <button id="edit${i}" onclick="edit(${i})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            <button id="save${i}" onclick="save(${i})" style="display: none;" ><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                            <button id="del${i}" onclick="remove(${i})"><i class="fa fa-trash" aria-hidden="true"></i></button></div></br>`
+                    }
+                }
+                function edit(no){
+                    
+                    document.getElementById("edit"+no).style.display="none"
+                    document.getElementById("save"+no).style.display="initial"
+                        
+                    textHandle = document.getElementById("text"+no)
+                    authorHandle = document.getElementById("author"+no)
+                    text = textHandle.innerHTML
+                    author = authorHandle.innerHTML
+
+                    textHandle.innerHTML=`<textarea rows="1" id="ftext${no}" class="form-control form-control-lg" value="">${text}</textarea></br>`
+                    authorHandle.innerHTML=`<textarea rows="1" id="fauthor${no}" class="form-control form-control-lg" value="">${author}</textarea>`
+                    
+                }
+                function save(no){
+                    textHandle = document.getElementById("ftext"+no)
+                    authorHandle = document.getElementById("fauthor"+no)
+                    text = textHandle.value
+                    author = authorHandle.value
+                    
+                    var result= window.confirm("Do you want to continnue?")
+                    if (result){
+                        const quote = {
+                            text, 
+                            author
+                        }
+                        if(quote.text && quote.author){
+                            quotes[no]=quote   
+                            localStorage.setItem('quotes',JSON.stringify(quotes))
+                        }
+                        else{
+                            alert ("value can't be empty")
+                        }
+                        document.getElementById("edit"+no).style.display="initial"
+                        document.getElementById("save"+no).style.display="none"
+                        location.reload()
+                    } 
+                    document.getElementById("edit"+no).style.display="initial"
+                    document.getElementById("save"+no).style.display="none"
+                    location.reload()
+                }
+                function remove(no){
+                    quotes = JSON.parse(localStorage.getItem('quotes'))
+                    var delHandle = document.getElementById("del"+no)
+                    quotes.splice(no,1)
+                    localStorage.setItem('quotes',JSON.stringify(quotes))
+                    location.reload()
+                }
+            </script>
+    </body>
+</html>

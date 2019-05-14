@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add quote</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body style="background-color: grey">
+        <h1 align=center>Quotify</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="navbar-nav nav-fill w-100">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Random Quote (API)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="saved-quotes.html">Random Quote (Local)</a>
+                        </li>
+                        <li class="active nav-item">
+                            <a class="nav-link" href="new-quote.html">Add Quote</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="list-all-saved-quotes.html">List All Quotes</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+        <form align="center">
+            <textarea rows="8" id="text1" placeholder="Enter your Quote ." value="" class="form-control form-control-lg"></textarea></br>
+            <textarea rows="1" id="author1" placeholder="Enter Author Name" value="" class="form-control form-control-lg"></textarea></br>
+            <input type="button" value="save" id="save" onclick="saveData()" class="btn btn-primary btn-block"/>
+        </form>
+        <script>
+            let quotes, text , author
+            if(localStorage.getItem('quotes')) {
+                quotes = JSON.parse(localStorage.getItem('quotes'))
+            }
+            else {
+                localStorage.setItem('quotes', JSON.stringify([]))
+                quotes = JSON.parse(localStorage.getItem('quotes'))
+            }
+            
+            const textHandle = document.getElementById('text1')
+            const authorHandle = document.getElementById('author1')
+            const saveHandle = document.getElementById('save')
+            
+            function saveData(){ 
+                const quote={
+                     text :textHandle.value, 
+                     author : authorHandle.value
+                }
+                if(quote.text && quote.author){
+                    quotes.push(quote)    
+                    localStorage.setItem('quotes',JSON.stringify(quotes))
+                    console.log(localStorage)
+                }else{
+                    alert("Fields can't be empty")
+                }
+            }
+        </script>
+        </div>   
+    </body>
+</html>
